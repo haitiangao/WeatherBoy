@@ -4,6 +4,9 @@ package com.example.weatherboy.network;
 import com.example.weatherboy.model.Library;
 import com.example.weatherboy.util.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -45,6 +48,7 @@ public class WeatherRetrofitService {
     public Observable<Library> getWeatherRx(String query) {
         return weatherService.getWeatherRx(query, API_KEY);
     }
+
 
 
 }

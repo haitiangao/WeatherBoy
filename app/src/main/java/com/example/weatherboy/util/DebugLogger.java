@@ -2,8 +2,8 @@ package com.example.weatherboy.util;
 
 import android.util.Log;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.weatherboy.util.Constants.ERROR_PREFIX;
+import static com.example.weatherboy.util.Constants.TAG;
 
 
 public class DebugLogger {

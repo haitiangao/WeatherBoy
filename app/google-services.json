@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "654046241285",
+    "firebase_url": "https://weatherboy-ad745.firebaseio.com",
+    "project_id": "weatherboy-ad745",
+    "storage_bucket": "weatherboy-ad745.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654046241285:android:80c51bffcf51966f5cb26c",
+        "android_client_info": {
+          "package_name": "com.example.mvvmgooglebookdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654046241285-8kd2cs10cbmn6652k9vr8ufncu4rtfdn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mvvmgooglebookdb",
+            "certificate_hash": "194bef35fd6dcdbc0a4fd4af463c1b754023b204"
+          }
+        },
+        {
+          "client_id": "654046241285-h2vv45g966ob40n864fbm690ualoo562.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4IVGZDIN00vPn-4tDqSgAB6PD6WQIRbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654046241285-h2vv45g966ob40n864fbm690ualoo562.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

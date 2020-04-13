@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -25,6 +28,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.weatherboy.R;
+import com.example.weatherboy.adapter.WeatherAdapter;
+import com.example.weatherboy.model.Library;
 import com.example.weatherboy.model.Weather;
 import com.example.weatherboy.util.Constants;
 import com.example.weatherboy.util.DebugLogger;
@@ -34,12 +39,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.disposables.CompositeDisposable;
 import kotlin.jvm.internal.Intrinsics;
 
@@ -74,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Handler timeHandler;
     private LocationManager locationManager;
+    private List<Library> initialList = new ArrayList<>();
+    private List<Library> currentList = new ArrayList<>();
+
     @BindView(R.id.dateView)
     TextView dateView;
     @BindView(R.id.temperatureView)
@@ -86,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     TextView weatherView;
     @BindView(R.id.weatherSearchView)
     SearchView weatherSearcher;
+    @BindView(R.id.weatherFavRecycle)
+    RecyclerView favWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         ButterKnife.bind(this);
 
         viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
-
 
         weatherSearcher.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -108,9 +119,26 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, RecyclerView.VERTICAL);
+        favWeather.setLayoutManager(new LinearLayoutManager(this));
+        favWeather.setAdapter(new WeatherAdapter(initialList,this));
+        favWeather.addItemDecoration(itemDecoration);
+
         handleTime();
+        delayPopulate();
     }
 
+    private void delayPopulate(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                populateRecycler();
+            }
+
+        }, 2000);
+    }
 
     private void doMySearch(String query) {
         DebugLogger.logDebug("Searching");
@@ -139,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             DebugLogger.logError(throwable);
 
         }));
-
     }
 
 
@@ -154,6 +181,55 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }, 10);
 
     }
+
+    private void populateRecycler(){
+        compositeDisposable.add(viewModel.getFavLocations().subscribe(locations->{
+
+            DebugLogger.logDebug("Locations:" +locations.size());
+            currentList.clear();
+            getAllWeather(locations);
+            delayRecycle();
+
+        },throwable -> {
+            DebugLogger.logError(throwable);
+
+        }));
+    }
+
+    private void delayRecycle(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                WeatherAdapter recycleAdaptor = new WeatherAdapter(currentList,getBaseContext());
+                favWeather.setAdapter(null);
+                favWeather.setAdapter(recycleAdaptor);
+                recycleAdaptor.notifyDataSetChanged();
+            }
+        }, 1000);
+    }
+
+    private void getAllWeather(List<String> queryList){
+        for(String query:queryList) {
+            compositeDisposable.add(viewModel.getWeatherRx(query).subscribe(locations -> {
+
+            currentList.add(locations);
+            }, throwable -> {
+                DebugLogger.logError(throwable);
+
+            }));
+        }
+
+    }
+
+    @OnClick(R.id.favouriteLocationButton)
+    public void createNewFavourite(){
+        String location =weatherSearcher.getQuery().toString();
+        viewModel.sendNewLocation(location);
+        populateRecycler();
+    }
+
+
 
     protected void onStart() {
         super.onStart();

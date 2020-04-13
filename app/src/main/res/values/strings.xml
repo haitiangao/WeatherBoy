@@ -5,4 +5,6 @@
     <string name="temperature">00°C</string>
     <string name="feels_like">Feels like: 00°C</string>
     <string name="weather">weather</string>
+    <string name="favourite">Favourite</string>
+    <string name="location_name">Location Name</string>
 </resources>

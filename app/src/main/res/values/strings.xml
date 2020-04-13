@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WeatherBoy</string>
+    <string name="search_hint">Search places or the web</string>
+    <string name="date">Date here</string>
+    <string name="temperature">00°C</string>
+    <string name="feels_like">Feels like: 00°C</string>
+    <string name="weather">weather</string>
+</resources>

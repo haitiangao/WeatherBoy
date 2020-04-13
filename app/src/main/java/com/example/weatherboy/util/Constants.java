@@ -18,4 +18,5 @@ public class Constants {
     public static final String SEARCHHINT ="Search places";
 
     public static final String LOCATION_PERMISSION = "android.permission.ACCESS_FINE_LOCATION";
+    public static final String SPLASHURL = "https://wi-images.condecdn.net/image/doEYpG6Xd87/crop/2040/f/weather.jpg";
 }
